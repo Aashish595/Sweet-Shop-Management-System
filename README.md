@@ -6,6 +6,8 @@ This project demonstrates real‑world usage of **Node.js, Express, MongoDB, Rea
 
 ---
 
+##Live Link -> https://sweet-shop-management-system-peach-rho.vercel.app/
+
 ## ✨ Key Features
 
 ### 🔐 User Authentication
