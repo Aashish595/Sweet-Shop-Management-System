@@ -1,12 +1,14 @@
 import axios from 'axios';
 
+
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: import.meta.env.VITE_API_URL, 
   headers: {
-    'Content-Type': 'application/json'
-  }
+    'Content-Type': 'application/json',
+  },
 });
 
+// Add token to Authorization header if exists
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
@@ -14,4 +16,5 @@ api.interceptors.request.use((config) => {
   }
   return config;
 });
+
 export default api;
