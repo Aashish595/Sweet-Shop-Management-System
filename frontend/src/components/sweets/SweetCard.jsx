@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { useAuth } from '../../context/AuthContext';
-import { useSweet } from '../../context/SweetContext';
-import { formatPrice, truncateText, getSweetImage } from '../../utils/helpers';
-import PurchaseModal from './PurchaseModal';
-import RestockModal from './RestockModal';
-import SweetForm from './SweetForm';
+import React, { useState } from "react";
+import { useAuth } from "../../context/AuthContext";
+import { useSweet } from "../../context/SweetContext";
+import { formatPrice, truncateText, getSweetImage } from "../../utils/helpers";
+import PurchaseModal from "./PurchaseModal";
+import RestockModal from "./RestockModal";
+import SweetForm from "./SweetForm";
 
 const SweetCard = ({ sweet }) => {
   const { user, isAdmin } = useAuth();
@@ -23,10 +23,10 @@ const SweetCard = ({ sweet }) => {
     }
   };
 
+
   return (
     <>
       <div className="border rounded-lg p-4 bg-white space-y-3">
-
         {/* Image */}
         <img
           src={imageUrl}
@@ -43,30 +43,49 @@ const SweetCard = ({ sweet }) => {
 
         <div className="flex justify-between items-center">
           <p className="font-semibold">{formatPrice(sweet.price)}</p>
-          <p className="text-sm text-gray-600">
-            Stock: {sweet.quantity}
-          </p>
+          <p className="text-sm text-gray-600">Stock: {sweet.quantity}</p>
         </div>
 
-        {/* User Action */}
-        {user && (
-          <button
-            onClick={() => {
-              setQuantity(1);
-              setShowPurchaseModal(true);
-            }}
-            disabled={sweet.quantity === 0}
-            className={`w-full border rounded py-2 ${
-              sweet.quantity === 0
-                ? 'bg-gray-200 cursor-not-allowed'
-                : 'hover:bg-gray-100'
-            }`}
-          >
-            Buy
-          </button>
+        {/* User Action (ONLY normal users) */}
+        {user && !isAdmin && sweet.quantity > 0 && (
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+              className="px-3 py-1 border rounded"
+            >
+              −
+            </button>
+
+            <span className="min-w-[24px] text-center">{quantity}</span>
+
+            <button
+              onClick={() =>
+                setQuantity((q) => Math.min(sweet.quantity, q + 1))
+              }
+              className="px-3 py-1 border rounded"
+            >
+              +
+            </button>
+
+            <button
+              onClick={() => setShowPurchaseModal(true)}
+              className="ml-auto bg-blue-600 text-white px-4 py-2 rounded"
+            >
+              Buy
+            </button>
+          </div>
         )}
 
+        {user && !isAdmin && sweet.quantity === 0 && (
+          <button
+            disabled
+            className="w-full bg-gray-200 py-2 rounded cursor-not-allowed"
+          >
+            Out of Stock
+          </button>
+        )}
         {/* Admin Actions */}
+
         {isAdmin && (
           <div className="flex justify-between text-sm pt-2 border-t">
             <button

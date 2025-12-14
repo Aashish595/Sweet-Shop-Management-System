@@ -17,7 +17,6 @@ import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import Dashboard from './pages/Dashboard';
 import SweetsPage from './pages/SweetsPage';
-import AdminPage from './pages/AdminPage';
 
 
 function App() {
@@ -43,12 +42,6 @@ function App() {
                 <Route path="/sweets" element={
                   <ProtectedRoute>
                     <SweetsPage />
-                  </ProtectedRoute>
-                } />
-                
-                <Route path="/admin" element={
-                  <ProtectedRoute adminOnly>
-                    <AdminPage />
                   </ProtectedRoute>
                 } />
                 

@@ -1,21 +1,19 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { authService } from '../services/authService';
 
-const AuthContext = createContext();
+const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(authService.getCurrentUser());
   const [token, setToken] = useState(authService.getToken());
   const [loading, setLoading] = useState(true);
 
-  // On mount, sync state with localStorage
   useEffect(() => {
     setUser(authService.getCurrentUser());
     setToken(authService.getToken());
     setLoading(false);
   }, []);
 
-  // Login function
   const login = async (credentials) => {
     const data = await authService.login(credentials);
     setUser(data.user);
@@ -23,7 +21,6 @@ export const AuthProvider = ({ children }) => {
     return data;
   };
 
-  // Register function
   const register = async (userData) => {
     const data = await authService.register(userData);
     setUser(data.user);
@@ -31,15 +28,15 @@ export const AuthProvider = ({ children }) => {
     return data;
   };
 
-  // Logout function
   const logout = () => {
     authService.logout();
     setUser(null);
     setToken(null);
   };
 
-  const isAuthenticated = () => !!token;
-  const isAdmin = () => user?.role === 'admin';
+  // ✅ derived values (NO functions)
+  const isAuthenticated = !!user;
+  const isAdmin = user?.role === 'admin';
 
   return (
     <AuthContext.Provider
@@ -47,11 +44,11 @@ export const AuthProvider = ({ children }) => {
         user,
         token,
         loading,
-        login,
-        register,
-        logout,
         isAuthenticated,
         isAdmin,
+        login,
+        register,
+        logout
       }}
     >
       {children}
@@ -59,5 +56,4 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// Custom hook to use auth context
 export const useAuth = () => useContext(AuthContext);

@@ -1,9 +1,10 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { APP_NAME } from '../../utils/constants';
+import { FaCandyCane, FaUserCircle } from 'react-icons/fa';
 
 const Header = () => {
-  const { user, logout, isAdmin } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -11,39 +12,53 @@ const Header = () => {
     navigate('/login');
   };
 
+  const navLinkClass = ({ isActive }) =>
+    isActive
+      ? 'text-blue-600 font-semibold'
+      : 'text-gray-700 hover:text-blue-600';
+
   return (
-    <header className="bg-white shadow-sm border-b">
-      <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-        
+    <header className="bg-white border-b shadow-sm">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+
         {/* Logo */}
-        <Link to="/" className="text-2xl font-bold text-blue-600">
-          {APP_NAME}
+        <Link to="/" className="flex items-center gap-2">
+          <FaCandyCane className="text-pink-500 text-2xl" />
+          <span className="text-xl font-bold text-gray-800">
+            {APP_NAME}
+          </span>
         </Link>
 
         {/* Navigation */}
-        <nav className="flex items-center gap-6 text-sm font-medium text-gray-700">
-          <Link to="/" className="hover:text-blue-600">
+        <nav className="flex items-center gap-6 text-sm font-medium">
+          <NavLink to="/" className={navLinkClass}>
             Home
-          </Link>
-
-          <Link to="/sweets" className="hover:text-blue-600">
+          </NavLink>
+          <NavLink to="/sweets" className={navLinkClass}>
             Sweets
-          </Link>
+          </NavLink>
+        </nav>
 
-          {isAdmin && (
-            <Link to="/admin" className="hover:text-blue-600">
-              Admin
-            </Link>
-          )}
+        {/* Right Section */}
+        <div className="flex items-center gap-4">
 
           {user ? (
             <>
-              <span className="text-gray-600">
-                {user.username} ({user.role})
-              </span>
+              {/* User Info */}
+              <div className="flex items-center gap-2 text-gray-700">
+                <FaUserCircle className="text-2xl" />
+                <div className="text-sm leading-tight">
+                  <div className="font-semibold">{user.username}</div>
+                  <div className="text-xs text-gray-500 capitalize">
+                    {user.role}
+                  </div>
+                </div>
+              </div>
+
+              {/* Logout */}
               <button
                 onClick={handleLogout}
-                className="text-red-600 hover:underline"
+                className="text-sm text-red-600 hover:underline"
               >
                 Logout
               </button>
@@ -52,19 +67,20 @@ const Header = () => {
             <>
               <Link
                 to="/login"
-                className="text-blue-600 hover:underline"
+                className="text-sm font-medium text-blue-600 hover:underline"
               >
                 Login
               </Link>
               <Link
                 to="/register"
-                className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700"
+                className="bg-blue-600 text-white px-4 py-1.5 rounded-md text-sm hover:bg-blue-700 transition"
               >
                 Register
               </Link>
             </>
           )}
-        </nav>
+
+        </div>
       </div>
     </header>
   );
