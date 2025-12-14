@@ -1,47 +1,32 @@
-import { createContext, useContext, useEffect, useState, useRef } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import api from '../services/api';
-import { useAuth } from './AuthContext';
 
-const SweetContext = createContext(null);
+const SweetContext = createContext();
 
 export const SweetProvider = ({ children }) => {
-  const { loading: authLoading, token } = useAuth();
-
   const [sweets, setSweets] = useState([]);
-  const [loading, setLoading] = useState(false);
-
-  const hasFetched = useRef(false); // 
+  const [loading, setLoading] = useState(true);
 
   const fetchSweets = async () => {
     try {
-      setLoading(true);
       const res = await api.get('/sweets');
-      setSweets(res.data.sweets);
+      setSweets(res.data);
     } catch (err) {
-      console.error('Fetch sweets error:', err);
+      console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (!authLoading && token && !hasFetched.current) {
-      hasFetched.current = true;
-      fetchSweets();
-    }
-  }, [authLoading, token]);
+    fetchSweets(); // 
+  }, []);
 
   return (
-    <SweetContext.Provider value={{ sweets, loading, fetchSweets }}>
+    <SweetContext.Provider value={{ sweets, fetchSweets, loading }}>
       {children}
     </SweetContext.Provider>
   );
 };
 
-export const useSweet = () => {
-  const context = useContext(SweetContext);
-  if (!context) {
-    throw new Error('useSweet must be used within a SweetProvider');
-  }
-  return context;
-};
+export const useSweet = () => useContext(SweetContext);
