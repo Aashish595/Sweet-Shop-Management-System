@@ -10,7 +10,7 @@ export const SweetProvider = ({ children }) => {
   const fetchSweets = async () => {
     try {
       const res = await api.get('/sweets');
-      setSweets(res.data);
+      setSweets(res.data.data);
     } catch (err) {
       console.error(err);
     } finally {
