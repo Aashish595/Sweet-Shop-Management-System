@@ -8,6 +8,19 @@ This project demonstrates real‑world usage of **Node.js, Express, MongoDB, Rea
 
 ##Live Link -> https://sweet-shop-management-system-peach-rho.vercel.app/
 
+## 📝 Demo Accounts / Default Credentials
+
+For testing the application, you can use the following accounts:
+
+### Admin Account
+- Email: `admin@sweetshop.com`
+- Password: `admin123`
+
+### Customer Account
+- Email: `customer@sweetshop.com`
+- Password: `customer123`
+
+
 ## ✨ Key Features
 
 ### 🔐 User Authentication
