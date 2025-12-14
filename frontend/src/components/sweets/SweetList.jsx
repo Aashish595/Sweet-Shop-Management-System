@@ -28,6 +28,15 @@ const SweetList = () => {
     );
   }
 
+  if (!Array.isArray(sweets)) {
+  return (
+    <div className="min-h-[400px] flex items-center justify-center">
+      <p className="text-red-500">Invalid sweets data</p>
+    </div>
+  );
+}
+
+
   return (
     <div className="space-y-8">
       {/* Header with Actions */}
